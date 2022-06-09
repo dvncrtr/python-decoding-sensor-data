@@ -1,14 +1,15 @@
 from house_info import HouseInfo
 from datetime import date,datetime
-ENERGY_PER_BULB  = 0.2
-ENERGY_BITS = 0x0F0
+
 
 class EnergyData(HouseInfo):
+    ENERGY_PER_BULB  = 0.2
+    ENERGY_BITS = 0x0F0
     def __init__(self, data=[]):
         super().__init__(data)
     def _get_energy(self,rec):
         energy = int(rec,base=16)
-        energy = energy & ENERGY_BITS
+        energy = energy & self.ENERGY_BITS
         energy = energy >> 4
         return energy
     def _convert_data(self,data):
@@ -24,7 +25,7 @@ class EnergyData(HouseInfo):
 
         return self._convert_data(recs)
     def calculate_energy_usage(self,data):
-        total_energy = sum([ENERGY_PER_BULB*field for field in data])
+        total_energy = sum([field*self.ENERGY_PER_BULB for field in data])
         return total_energy
 
     
